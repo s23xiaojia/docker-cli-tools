@@ -64,7 +64,8 @@ function docker-enter() {
             sudo $NSENTER --target $PID --mount --uts --ipc --net --pid su - root
         else
             # Use env to clear all host environment variables.
-            sudo $NSENTER --target $PID --mount --uts --ipc --net --pid env -i $@
+            #sudo $NSENTER --target $PID --mount --uts --ipc --net --pid env -i $@
+            sudo $NSENTER --target $PID --mount --uts --ipc --net --pid $@
         fi
     fi
 }
