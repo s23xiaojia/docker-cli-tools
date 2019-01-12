@@ -115,6 +115,34 @@ function docker-ipall() {
     done
 }
 
+# @Desc: Display volume information for all running containers
+# @Version: 1.0.0
+# @Author: jiajunwei <login_532_gajun@sina.com>
+# @UpdateDate: 2019/01/12
+# @Usage: shell>docker-volinfo 
+# @Parameter: None 
+# @Return: None
+
+function docker-volinfo() {
+# docker container inspect -f '{{ .Mounts}}' $(docker ps -q) | cut -c 3- | cut -d " " -f 1 | sort -u
+    mnt_type_bind=()
+    mnt_type_vol=()
+
+    for name in $(docker ps  | awk '{print $NF}' | sed -n '2,$p');do
+      if [[ `docker container inspect -f '{{ .Mounts}}' $name | cut -c 3- | cut -d " " -f 1` == "volume" ]];then
+        mnt_type_vol=("${mnt_type_vol[*]}" "$name")
+      elif [[ `docker container inspect -f '{{ .Mounts}}' $name | cut -c 3- | cut -d " " -f 1` == "bind" ]];then
+        mnt_type_bind=("${mnt_type_bind[*]}" "$name")
+      fi
+    done
+
+    echo "mnt_type = bind:" 
+    for name in ${mnt_type_bind[*]};do echo -e -n "  - $name `docker container inspect -f '{{range .Mounts}}{{print .Source ","}}{{end}}' $name`\n";done
+    echo
+    echo "mnt_type = volume:"
+    for name in ${mnt_type_vol[*]};do echo -e -n "  - $name `docker container inspect -f '{{range .Mounts}}{{print .Name ","}}{{end}}' $name`\n";done
+}
+
 # kill all the container which is running
 alias docker-kill='docker kill $(docker ps -a -q)'
 
