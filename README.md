@@ -15,8 +15,10 @@
     $ docker-ipall [network_name] 
 ## Display the process pid of the specified container <br>
     $ docker-pid <container_name|container_id> 
-## enter or execute the specified command inside the container
+## Enter or execute the specified command inside the container
     $ docker-enter <container_name|container_id> [command] 
+## Display volume information for all running containers
+    $ docker-volinfo
 
 # install docker_setip.sh
 1. $ cd /usr/local/src
